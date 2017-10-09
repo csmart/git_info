@@ -5,7 +5,7 @@
 	* [Additional resources](#additional-resources)
 * [Development methodology](#development-methodology)
 * [Installing Git](#installing-git)
-* [Settings Git defaults](#settings-git-defaults)
+* [Setting Git defaults](#setting-git-defaults)
 * [Creating a repository](#creating-a-repository)
 * [Getting code from an existing repository](#getting-code-from-an-existing-repository)
 * [Workspace](#workspace)
@@ -50,7 +50,7 @@ The biggest core difference is that Git is _distributed_, not _centralised_.
 
 With Subversion, there is a single repository where the code and its history is
 stored. No-one gets full direct access to the repository (except
-administrators).  All SCM related commands like, committing, branching, merging
+administrators).  All SCM related commands like committing, branching, merging
 and even getting the log, are run across the network and on the central server.
 
 With Git on the other hand, while there is generally a single blessed
@@ -93,7 +93,7 @@ These will be especially useful when working with other developers and
 maintaining quality code.
 
 A common development approach is to perform all changes in a feature branch.
-Once the changes are ready, generally following some sort of automated tests
+Once the changes are ready, generally following some sort of automated testing
 and code review, they are merged into the main code which is stored in the
 _master_ branch (which is like the _trunk_ branch in Subversion).
 
@@ -114,7 +114,7 @@ Git is available for most platforms, including
 See the appropriate link above for your platform (but we'll assume you're using
 Linux).
 
-# Settings Git defaults
+# Setting Git defaults
 
 Once you have Git, you should set some global default settings. Setting these
 can be done by running the config command which writes to the .gitconfig file
@@ -145,8 +145,8 @@ git config --global core.abbrev 16
 
 Git is distributed and anyone can create a local repository.
 
-Simply enter a directory which you wish to turn into a Git repo (this can
-already have files in it) and initialise it!
+Simply provide the name of a directory which you wish to turn into a Git repo
+(this can already have files in it) and initialise it!
 
 ```bash
 git init /path/to/directory
@@ -172,7 +172,7 @@ checkout again into a different directory.
 
 With Git however, you _clone_ just one copy of the entire repository from a
 remote location. This is generally from a server (like GitLab) via SSH, but
-could use other protocols like Git, HTTP, or even a local file system directly.
+can be via other protocols like Git, HTTP, or even a local file system directly.
 
 The method you use to clone the repository will depend on what protocols the
 server provides.
@@ -181,7 +181,7 @@ server provides.
 # This uses SSH
 git clone user@server:/path/to/code /path/for/local/code
 
-# This uses HTTP
+# This uses HTTPS
 git clone https://user@server/path/to/code /path/for/local/code
 ```
 
@@ -202,7 +202,7 @@ git status
 ```
 
 This will print the branch and commit information, show you any files which are
-not tracked, as well as files which have been changed but not committed.
+not tracked, and any files which have been changed but not committed.
 
 We will see how to manage branches shortly.
 
@@ -317,7 +317,7 @@ git branch mybranch master
 ```
 
 Branches are extremely cheap because they are actually just a file which points
-to a unique commit in the Git history. No duplications of files is done.
+to a unique commit in the Git history. No duplication of files is done.
 
 ### Creating backups
 
@@ -340,7 +340,7 @@ git branch --move oldbranch newbranch
 
 ## Switching between branches
 
-Remember that Git has a full copy of the repository but only copy of the code
+Remember that Git has a full copy of the repository but only one copy of the code
 is accessible at any point in time in your workspace. By default this is the
 master branch, but we've shown how you can create as many branches as you like.
 
@@ -452,14 +452,14 @@ output.
 git log --oneline --graph --decorate --all
 ```
 
-Git also supports custom _format_ to show anything you like, which you can
+Git also supports custom _formats_ to show anything you like, which you can
 combine with options like _graph_.
 
 * Show the branch interactions
 * Commit hash
-* Branch commit came from
+* Branch a commit came from
 * One line commit message summary
-* How log ago the commit was made
+* How long ago the commit was made
 * Who made the commit
 
 ```bash
@@ -515,8 +515,8 @@ We'll re-visit this some more below.
 
 ## Committing a change
 
-When you make a commit a change using Subversion, it is a centralised event.
-You make a change to a file and when commit it, the change is sent to the
+When you commit a change using Subversion, it is a centralised event.
+You make a change to a file and when you commit it, the change is sent to the
 server and a commit record is made. This change is then inherited by everyone
 else using that branch in Subversion.
 
@@ -526,7 +526,7 @@ commits are pushed.
 To make a change, just edit a file in your workspace that Git is tracking (has
 previously been added).
 
-The status command should show that your workspace has a change that are "not
+The status command should show that your workspace has a change that is "not
 staged for commit."
 
 ```bash
@@ -547,7 +547,7 @@ Next, you can commit these changes which will prompt you for a commit message.
 git commit
 ```
 
-Type in your commit message. If you need to set this to a different edit, you
+Type in your commit message. If you need to change the default text editor, you
 can set this in your ~/.gitconfig.
 
 ### Adding a commit message
@@ -719,7 +719,7 @@ the most common way to pull in changes that have gone upstream.
 ### Forcing a push
 
 Generally, if you are working on your own branch and have done a rebase from
-another branch, or amended a commit you're save to force push.
+another branch, or amended a commit you're safe to force push.
 
 If you are working collaboratively, then you need to consider whether force
 pushing is correct - it may remove genuine changes other developers have
