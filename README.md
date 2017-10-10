@@ -2,6 +2,7 @@
 <!-- vim-markdown-toc GFM -->
 
 * [Information about Git](#information-about-git)
+* [TLDR; Just show me how to use Git!](#tldr-just-show-me-how-to-use-git)
 	* [Additional resources](#additional-resources)
 * [Development methodology](#development-methodology)
 * [Installing Git](#installing-git)
@@ -69,6 +70,14 @@ following three commands:
 Why does that matter? It grants the user flexibility that is not otherwise
 available, as you'll see below.
 
+# TLDR; Just show me how to use Git!
+
+This document is designed to provide just enough information to help you
+_understand_ the basics of Git.
+
+To jump to a quick guide on how to use Git, see the [workflow
+example](/workflow.md).
+
 ## Additional resources
 
 The Git website hosts the official open source [Git Pro
@@ -79,11 +88,9 @@ book](https://git-scm.com/book/) and
 If you're keen to try out Git in an online interactive tutorial, have a look at
 the [one from GitHub](https://try.github.io/).
 
-There is a [cheatsheet available](/cheatsheet.md) which provides many common
-Git commands.
-
-Finally, there is a page on the [basic internals of Git](/internals.md) if you
-are interested.
+This repo has a [cheatsheet available](/cheatsheet.md) which provides many
+common Git commands, as well as a page on the [basic internals of
+Git](/internals.md), if you are interested.
 
 # Development methodology
 
@@ -208,21 +215,43 @@ We will see how to manage branches shortly.
 
 # Remotes
 
+*This is where Git _really_ starts to differ from other tools like Subversion.*
+
 If you cloned a repository rather than initialising one locally, Git will
 remember the location that you initially cloned from.
 
-This is called a _remote_ and Git gives it the name _origin_. You can see this
-with the following command:
+This is called a _remote_ and Git gives it the name _origin_.
+
+In Subversion there is only one remote, which you talk to when you perform
+operations.
+
+Git lets you talk to _any number of remotes in different locations_ that have a
+copy of the same code base.
+
+You might want to do this if you have cloned your own copy of the code from a
+local server when there's also an upstream version elsewhere.
+
+See your remotes with the following command:
 
 ```bash
 git remote -v
 ```
 
-As you might have guessed, Git can have multiple remotes pointing to the same
-code base but at different locations.
+Because of this, _Git needs to know which one you want to talk to_ when you
+perform a network operation.
 
-You might want to do this if you have cloned your own copy of the code from a
-local server when there's also an upstream version elsewhere.
+Furthermore, you can also _reference remotes directly_ when you want to look at
+code.
+
+* master - this is your local master branch
+* origin/master - this is the master branch on the remote called origin
+
+Your local branch master is completely separate entity to the master branch on
+the remote. You can have local commits on your master that do not exist on any
+of the remote master branches.
+
+If you want to refer to the latest code on the remote, then use the remote name
+prefix.
 
 ## Adding a remote
 
@@ -314,6 +343,15 @@ local master branch like so.
 
 ```bash
 git branch mybranch master
+```
+
+It may be better to create your branch from the latest code on the remote, as
+your local branch may not be up-to-date or have different commits.
+
+Simply add the remote name prefix.
+
+```bash
+git branch mybranch origin/master
 ```
 
 Branches are extremely cheap because they are actually just a file which points
