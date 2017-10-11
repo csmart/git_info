@@ -179,7 +179,7 @@ checkout again into a different directory.
 
 With Git however, you _clone_ just one copy of the entire repository from a
 remote location. This is generally from a server (like GitLab) via SSH, but
-can be via other protocols like Git, HTTP, or even a local file system directly.
+can be via other protocols like Git, HTTPS, or even a local file system.
 
 The method you use to clone the repository will depend on what protocols the
 server provides.
@@ -544,7 +544,7 @@ commit.
 
 Unlike Subversion, each time you want to commit a change, the file must be
 re-added. This is because Git has an awesome feature called the staging area
-where you can gather ups of changes before they are committed.
+where you can gather up changes before they are committed.
 
 This allows you to do things like add specific _parts_ of a larger change into
 a commit, rather than the entire change.
@@ -663,7 +663,7 @@ changes, not a special merge commit later that goes onto master. This makes
 life much easier when working on code with others.
 
 ```bash
-git pull --rebase origin/master
+git pull --rebase origin master
 ```
 
 This also works if you're working on a feature branch collaboratively. If
@@ -734,12 +734,13 @@ git push
 
 ## When pushing fails
 
-If other users have committed changes to your branch, the remote copy of the
-branch will have extra commits that your local copy does not have.
+If other users have committed changes to the branch you are pushing to the
+remote copy of the branch will have extra commits that your local copy does not
+have.
 
-If you try to push your branch, Git will error because there are diverged
-paths. That is to say, your local branch has different commits to the remote,
-even though they share a common parent commit.
+If you try to push your branch, Git will report an error because there are
+diverged paths. That is to say, your local branch has different commits to the
+remote, even though they share a common parent commit.
 
 Git will ask you to deal with this and try your push again.
 
@@ -762,4 +763,10 @@ another branch, or amended a commit you're safe to force push.
 If you are working collaboratively, then you need to consider whether force
 pushing is correct - it may remove genuine changes other developers have
 pushed.
+
+To force a push add the --force command line option to the push command:
+
+```bash
+git push --force
+```
 
