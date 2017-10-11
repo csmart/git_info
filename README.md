@@ -11,6 +11,7 @@
 * [Getting code from an existing repository](#getting-code-from-an-existing-repository)
 * [Workspace](#workspace)
 * [Remotes](#remotes)
+	* [Referencing code directly in remotes](#referencing-code-directly-in-remotes)
 	* [Adding a remote](#adding-a-remote)
 * [Branches](#branches)
 	* [Local and remote branches](#local-and-remote-branches)
@@ -60,11 +61,13 @@ every user gets a full local copy of the repository by default. Each copy is
 equal.
 
 Commands like committing, branching, merging and even getting the log are run
-_locally_. Git does not touch the network unless you tell it to with one of the
-following three commands:
+_locally_. Git does not touch the network unless you tell it to with one of a
+few commands.
 
 * clone (get a local copy of a remote repository)
 * fetch (get the latest changes from a remote repository)
+  * pull (wraps fetch then does a merge)
+  * remote update (wraps fetch to get updates from all remotes)
 * push (push my local changes to a remote repository)
 
 Why does that matter? It grants the user flexibility that is not otherwise
@@ -80,7 +83,7 @@ example](/workflow.md).
 
 ## Additional resources
 
-The Git website hosts the official open source [Git Pro
+The Git website hosts the official open source [Pro Git
 book](https://git-scm.com/book/) and
 [Tutorial](https://git-scm.com/docs/gittutorial), as well as a number of
 [useful links](https://git-scm.com/documentation/external-links).
@@ -215,21 +218,19 @@ We will see how to manage branches shortly.
 
 # Remotes
 
-*This is where Git _really_ starts to differ from other tools like Subversion.*
+**This is where Git _really_ starts to differ from other tools like Subversion.**
+
+In Subversion there is only one remote. You don't even really think about it
+because any operations must automatically talk to the remote server.
+
+Git is distributed and it's not tied to a remote server. It lets you talk to
+_any number of remotes in different locations_ that have a copy of the same
+code base.
 
 If you cloned a repository rather than initialising one locally, Git will
 remember the location that you initially cloned from.
 
 This is called a _remote_ and Git gives it the name _origin_.
-
-In Subversion there is only one remote, which you talk to when you perform
-operations.
-
-Git lets you talk to _any number of remotes in different locations_ that have a
-copy of the same code base.
-
-You might want to do this if you have cloned your own copy of the code from a
-local server when there's also an upstream version elsewhere.
 
 See your remotes with the following command:
 
@@ -237,8 +238,15 @@ See your remotes with the following command:
 git remote -v
 ```
 
-Because of this, _Git needs to know which one you want to talk to_ when you
-perform a network operation.
+You might want to use more than one remote if you have cloned your own copy of
+the code from a local server when there's also an upstream version elsewhere.
+
+Because you can have more than one, _Git needs to know which remote you want to
+talk to_ when you perform a network operation.
+
+More about that soon!
+
+## Referencing code directly in remotes
 
 Furthermore, you can also _reference remotes directly_ when you want to look at
 code.
@@ -251,7 +259,7 @@ the remote. You can have local commits on your master that do not exist on any
 of the remote master branches.
 
 If you want to refer to the latest code on the remote, then use the remote name
-prefix.
+prefix like origin/master.
 
 ## Adding a remote
 
@@ -340,6 +348,10 @@ you currently have checked out).
 
 For example, you can create a branch called _mybranch_ from the tip of your
 local master branch like so.
+
+Note that if your local master is behind you may want to [update it
+first](#getting-recent-updates) to get the latest changes from the remote
+branch.
 
 ```bash
 git branch mybranch master
@@ -592,9 +604,10 @@ can set this in your ~/.gitconfig.
 
 In general, good commit messages should follow a pattern like so.
 
-- Start with a short description of the problem, less than 70 chars. Ideally
+- Start with a short description of the problem, less than 50 chars. Ideally
   this should also reference the area of the code the change applies to.
-- In a new paragraph, describe the problem or feature the patch is addressing.
+- In a new paragraph, describe the problem or feature the patch is addressing
+  using lines of no more than 72 characters.
 - In a new paragraph, describe how the patch solves or implements the above.
 - Add any other notes relating to the patch (like how to test it).
 - If related tickets, merge requests or snippets exist in GitLab, they can be referenced.
