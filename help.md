@@ -52,7 +52,7 @@ Don't panic!
 If you have already committed your code, it's easy!
 
 Just make a new branch and your commits will be there. Then we can reset your
-local master to the latest code on the remote master branch, which will remote
+local master to the latest code on the remote master branch, which will remove
 your local commits.
 
 ```bash
@@ -74,7 +74,7 @@ commits in your branch.
 
 ### I did not have to resolve conflicts..
 
-If you *did not* have to resolve any conflicts you can just re-do a rebase. Git
+If you *did not* have to resolve any conflicts you can just do a rebase. Git
 is smart enough to know that the commits are already there and will fix up the
 order.
 

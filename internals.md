@@ -23,8 +23,8 @@ Git has a unique hash which is made of of the information above.
 
 To reference a commit, you use that hash.
 
-The history of the repository is possible by linking all the commits together
-in a tree, with that unique information.
+The creation of the history of the repository is made possible by linking all
+the commits together in a tree, with that unique information.
 
 Git also has an index for the staging area (where you prepare commits) and
 refs (references). The refs objects point to commits and are used for things

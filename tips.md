@@ -105,7 +105,7 @@ git reset --hard origin/mybranch-remote-backup
 
 ## Find parent commit which is common to multiple branches
 
-Sometimes it's useful to find the common parent commit between to branches,
+Sometimes it's useful to find the common parent commit between two branches,
 before they both went their own way. This can be any commit or branch, such as
 local master and remote master.
 

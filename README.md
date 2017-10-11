@@ -604,9 +604,10 @@ can set this in your ~/.gitconfig.
 
 In general, good commit messages should follow a pattern like so.
 
-- Start with a short description of the problem, less than 70 chars. Ideally
+- Start with a short description of the problem, less than 50 chars. Ideally
   this should also reference the area of the code the change applies to.
-- In a new paragraph, describe the problem or feature the patch is addressing.
+- In a new paragraph, describe the problem or feature the patch is addressing
+  using lines of no more than 72 characters.
 - In a new paragraph, describe how the patch solves or implements the above.
 - Add any other notes relating to the patch (like how to test it).
 - If related tickets, merge requests or snippets exist in GitLab, they can be referenced.
