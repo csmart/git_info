@@ -10,6 +10,7 @@
 			* [Using Git review with Gerrit](#using-git-review-with-gerrit)
 	* [Starting on the next branch](#starting-on-the-next-branch)
 		* [Reset your master branch](#reset-your-master-branch)
+* [Common issues](#common-issues)
 
 <!-- vim-markdown-toc -->
 
@@ -34,10 +35,13 @@ git status
 # Check the log
 git log
 
-# Create and switch to a new feature branch
+# Create a new feature branch from master
 # _origin/master_ branches from the latest code on the remote master branch
 # _master_ would branch from the state of your local master branch
-git checkout -b mybranch origin/master
+git branch mybranch origin/master
+
+# Switch to the new branch
+git checkout mybranch
 
 # Edit a file
 vim README.md
@@ -89,7 +93,7 @@ git rebase --continue
 
 Note that this will _re-write your recent history_.
 
-All of the commit hashes from your changes will be different now because we've
+All of the hashes from your commits will be different now because we've
 inserted any new commits from master in before your local commits.
 
 ## Merging your code back into master
@@ -100,19 +104,34 @@ code in your feature branch merged into master.
 ### Pushing code to GitLab
 
 With GitLab you push your local branch up to the remote server and then create
-a merge request.
+a merge request in the web interface.
 
 ```bash
 # Push your branch to GitLab and set branch tracking information
 git push origin mybranch --set-upstream
+```
 
+If you get an error saying there is new code on the server that you don't have,
+Git will recommend that you do a _pull_ to merge in those changes.
+
+However, if the code is different because you have _re-written your history_,
+*do not do a git pull*. You already have the latest code (you've just made it
+different to the remote). You don't need the changes in the remote you want the
+remote to have your new history.
+
+In this case, you want to force push your changes so that the remote history
+gets re-written with your local one.
+
+```bash
 # Force push your branch if your history has changed
-# Do not do a merge!
 git push origin mybranch --force
 ```
 
 Now you can log into GitLab and create a merge request to get the changes in
 your feature branch merged into master.
+
+You can make new local changes and push again, GitLab will automatically update
+the merge request.
 
 ### Pushing code for Gerrit code review
 
@@ -125,7 +144,7 @@ Generally, you would have a second remote called _gerrit_ which points to the
 repository on the Gerrit server, which is where you push to.
 
 ```bash
-# Add a remote called gerrit that points to the code on Gerrit
+# Add a remote called gerrit that points to the Git repo on Gerrit
 git remote add gerrit user@gerrit:/path/to/code
 
 # Push your code to special location in Gerrit
@@ -134,27 +153,30 @@ git push gerrit mybranch:refs/for/master
 
 #### Using Git review with Gerrit
 
-The OpenStack project provides a tool called _git-review_ to make working with
-Gerrit easier.
+The OpenStack project provides a tool called
+[git-review](https://docs.openstack.org/infra/git-review/index.html) to make
+working with Gerrit easier.
 
-A project which is configured to use Gerrit will contain a _.gitreview_ file in
-its Git repository that points to the Gerrit server.
+Any code base which is configured to use Gerrit will contain a _.gitreview_ file
+in its Git repository that points to the Gerrit server.
 
-In this instance you can simply run _review_ setup to add your remote.
+In this instance you can simply run _review_ setup to add your remote. This
+will verify that you can talk to the server and create your new _gerrit_
+remote.
 
 ```bash
 git review -s
 ```
 
-From now on you don't manually push, you run the _review_ command from your
-branch.
+You don't manually push your changes, you run the _review_ command from your
+branch which will handle all of that for you.
 
 ```bash
 git review
 ```
 
-You can make local commits as required and then re-run the same command which
-will update the code review in Gerrit.
+You can make new local commits as required and then re-run the same command
+which will update the code review in Gerrit.
 
 ## Starting on the next branch
 You don't need to wait for your code to merge before working on a new branch,
@@ -195,3 +217,8 @@ git checkout -b another-branch origin/master
 ```
 
 Now continue with making your changes in your new branch.
+
+# Common issues
+
+See the [help page](/help.md) page for some common issues you might encounter,
+along with some advice to help you.
