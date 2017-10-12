@@ -1,16 +1,3 @@
-<!-- vim-markdown-toc GFM -->
-
-* [Common issues](#common-issues)
-	* [I've started making changes on master, not a branch](#ive-started-making-changes-on-master-not-a-branch)
-	* [I've added commits to my local master, not a branch](#ive-added-commits-to-my-local-master-not-a-branch)
-	* [I did a pull (merge) instead of a pull --rebase](#i-did-a-pull-merge-instead-of-a-pull---rebase)
-		* [I did not have to resolve conflicts..](#i-did-not-have-to-resolve-conflicts)
-		* [I had to resolve conflicts..](#i-had-to-resolve-conflicts)
-	* [I'm stuck resolving a conflict](#im-stuck-resolving-a-conflict)
-	* [I squashed commits too far back via rebase](#i-squashed-commits-too-far-back-via-rebase)
-
-<!-- vim-markdown-toc -->
-
 # Common issues
 
 Here are a few common issues that you might encounter when using Git. They
@@ -20,7 +7,20 @@ See the [tips section](/tips.md) for some ways you can help get yourself out of
 sticky situations, like making backup branches (or just pushing your changes)
 before you do something tricky.
 
-## I've started making changes on master, not a branch
+<!-- vim-markdown-toc GFM -->
+
+* [I've started making changes on master, not a branch](#ive-started-making-changes-on-master-not-a-branch)
+* [I've added commits to my local master, not a branch](#ive-added-commits-to-my-local-master-not-a-branch)
+* [I'm in detached HEAD state](#im-in-detached-head-state)
+* [I did a pull (merge) instead of a pull --rebase](#i-did-a-pull-merge-instead-of-a-pull---rebase)
+	* [I did not have to resolve conflicts..](#i-did-not-have-to-resolve-conflicts)
+	* [I had to resolve conflicts..](#i-had-to-resolve-conflicts)
+* [I'm stuck resolving a conflict](#im-stuck-resolving-a-conflict)
+* [I squashed commits too far back via rebase](#i-squashed-commits-too-far-back-via-rebase)
+
+<!-- vim-markdown-toc -->
+
+# I've started making changes on master, not a branch
 
 Don't panic!
 
@@ -45,7 +45,7 @@ git commit -a
 
 ```
 
-## I've added commits to my local master, not a branch
+# I've added commits to my local master, not a branch
 
 Don't panic!
 
@@ -66,13 +66,24 @@ git reset --hard origin/master
 git checkout savemeagain
 ```
 
-## I did a pull (merge) instead of a pull --rebase
+# I'm in detached HEAD state
+
+This is because your workspace is not a tracked branch, perhaps as a result of
+a rebase.
+
+You can simply switch back to a branch, or create a branch and commit your
+work.
+
+Have a look at _git status_ to see what's going on.
+
+
+# I did a pull (merge) instead of a pull --rebase
 
 We do a rebase because we want to avoid merge commits that have to resolve
 conflicts. We want conflict resolution to be handled as part of the regular
 commits in your branch.
 
-### I did not have to resolve conflicts..
+## I did not have to resolve conflicts..
 
 If you *did not* have to resolve any conflicts you can just do a rebase. Git
 is smart enough to know that the commits are already there and will fix up the
@@ -82,7 +93,7 @@ order.
 git rebase origin/master
 ```
 
-### I had to resolve conflicts..
+## I had to resolve conflicts..
 
 If you *have* resolved some conflicts, this is more tricky - we do not want to
 have those merge conflict commits.
@@ -110,7 +121,7 @@ git cherry-pick <commits>
 git pull --rebase origin/master
 ```
 
-## I'm stuck resolving a conflict
+# I'm stuck resolving a conflict
 
 If you're stuck in a merge or rebase conflict that you don't know how to fix,
 you can always back out of the merge. This will put you back on your local
@@ -124,7 +135,7 @@ git merge --abort
 git rebase --abort
 ```
 
-## I squashed commits too far back via rebase
+# I squashed commits too far back via rebase
 
 This can happen if you have done a rebase and accidentally squashed a commit
 that was already part of the upstream master branch.

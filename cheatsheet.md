@@ -2,10 +2,18 @@
 Below are some common commands you will use with Git. It is by _no means_
 exhaustive, but should cover the majority of tasks.
 
-Read other parts of this document to get a better understanding of how to work
-with Git and how to use these commands.
+<!-- vim-markdown-toc GFM -->
 
-## Configuring Git
+* [Configuring Git](#configuring-git)
+* [Getting a repository](#getting-a-repository)
+* [Workspace](#workspace)
+* [Working with branches](#working-with-branches)
+* [Working with the code](#working-with-the-code)
+* [Sharing and getting code](#sharing-and-getting-code)
+
+<!-- vim-markdown-toc -->
+
+# Configuring Git
 
 | Command | Purpose |
 | --- | --- |
@@ -13,14 +21,14 @@ with Git and how to use these commands.
 | git config --global user.email &lt;your email&gt; | Default email to use in commits |
 | git config --global core.editor /usr/bin/vim | Set vim as default editor |
 
-## Getting a repository
+# Getting a repository
 
 | Command | Purpose |
 | --- | --- |
 | git init &lt;dir&gt; | Initialise a repository at &lt;dir&gt; |
 | git clone &lt;url&gt; &lt;dir&gt; | Clone a remote repository to &lt;dir&gt; |
 
-## Workspace
+# Workspace
 
 | Command | Purpose |
 | --- | --- |
@@ -28,7 +36,7 @@ with Git and how to use these commands.
 | git diff | Show changes to tracked files |
 | git diff --cached | Show changes to added files in staging area |
 
-## Working with branches
+# Working with branches
 
 | Command | Purpose |
 | --- | --- |
@@ -37,7 +45,7 @@ with Git and how to use these commands.
 | git checkout &lt;branch&gt; | Switch workspace to a branch |
 | git checkout -b &lt;new branch&gt; &lt;old branch&gt; | Create and switch to new branch |
 
-## Working with the code
+# Working with the code
 
 | Command | Purpose |
 | --- | --- |
@@ -48,7 +56,7 @@ with Git and how to use these commands.
 | git commit &lt;file(s)&gt; | Commit changes in files from staging area |
 | git commit --all &lt;file(s)&gt; | Commit all changes in all tracked files |
 
-## Sharing and getting code
+# Sharing and getting code
 
 | Command | Purpose |
 | --- | --- |
