@@ -1,15 +1,26 @@
+# Git
+
+<img src="/images/git_2x.png" align="right" width="400" alt="If that doesn't 
+fix it, git.txt contains the phone number of a friend of mine who understands 
+git. Just wait through a few minutes of 'It's really pretty simple, just think 
+of branches as...' and eventually you'll learn the commands that will fix 
+everything. https://xkcd.com/1597/"/>
 
 <!-- vim-markdown-toc GFM -->
 
-* [Information about Git](#information-about-git)
 * [TLDR; Just show me how to use Git!](#tldr-just-show-me-how-to-use-git)
+* [About Git](#about-git)
 	* [Additional resources](#additional-resources)
 * [Development methodology](#development-methodology)
 * [Installing Git](#installing-git)
 * [Setting Git defaults](#setting-git-defaults)
 * [Creating a repository](#creating-a-repository)
 * [Getting code from an existing repository](#getting-code-from-an-existing-repository)
-* [Workspace](#workspace)
+* [Working with Git](#working-with-git)
+	* [Workspace - where you modify code](#workspace---where-you-modify-code)
+	* [Staging area - where you prepare commits](#staging-area---where-you-prepare-commits)
+	* [refs (references) - pointers to a commit](#refs-references---pointers-to-a-commit)
+	* [HEAD - points to the branch in workspace](#head---points-to-the-branch-in-workspace)
 * [Remotes](#remotes)
 	* [Referencing code directly in remotes](#referencing-code-directly-in-remotes)
 	* [Adding a remote](#adding-a-remote)
@@ -26,18 +37,34 @@
 	* [View a commit](#view-a-commit)
 * [Making changes to the code](#making-changes-to-the-code)
 	* [Adding a file](#adding-a-file)
+	* [Making a change](#making-a-change)
+		* [Viewing differences in the code](#viewing-differences-in-the-code)
 	* [Committing a change](#committing-a-change)
-		* [Adding a commit message](#adding-a-commit-message)
+		* [Writing a good commit message](#writing-a-good-commit-message)
 		* [Amending a commit](#amending-a-commit)
+* [Modifying and squashing commits](#modifying-and-squashing-commits)
+	* [Interactive rebase](#interactive-rebase)
+		* [Delete commits](#delete-commits)
+		* [Reorder commits](#reorder-commits)
+		* [Squashing commits](#squashing-commits)
+		* [Modifying a commit message](#modifying-a-commit-message)
+		* [Modifying a commit](#modifying-a-commit)
 * [Getting recent updates](#getting-recent-updates)
-* [Viewing differences in the code](#viewing-differences-in-the-code)
 * [Sharing your changes](#sharing-your-changes)
 	* [When pushing fails](#when-pushing-fails)
 		* [Forcing a push](#forcing-a-push)
 
 <!-- vim-markdown-toc -->
 
-# Information about Git
+# TLDR; Just show me how to use Git!
+
+This document is designed to provide just enough information to help you
+_understand_ the basics of Git.
+
+To jump to a quick guide on how to use Git, see the [workflow
+example](/workflow.md).
+
+# About Git
 
 [Git](https://git-scm.com/) is a Source Code Management (SCM) system, similar
 to other tools like Subversion, which helps you to keep track of your code over
@@ -73,14 +100,6 @@ few commands.
 Why does that matter? It grants the user flexibility that is not otherwise
 available, as you'll see below.
 
-# TLDR; Just show me how to use Git!
-
-This document is designed to provide just enough information to help you
-_understand_ the basics of Git.
-
-To jump to a quick guide on how to use Git, see the [workflow
-example](/workflow.md).
-
 ## Additional resources
 
 The Git website hosts the official open source [Pro Git
@@ -113,6 +132,11 @@ main branch that everyone else consumes.
 
 Branching is core to the fundamental design of Git, it was not added on at a
 later stage.
+
+The changes in a feature branch should have a neat commit history, with few
+commits that are grouped together as appropriate. For example, aim to have a
+single commit for a feature, rather than dozens. This makes the history much
+more clean and easier to work with in the future.
 
 # Installing Git
 
@@ -195,12 +219,25 @@ git clone user@server:/path/to/code /path/for/local/code
 git clone https://user@server/path/to/code /path/for/local/code
 ```
 
-# Workspace
+# Working with Git
+
+Git has the following core concepts which are useful to know.
+
+| Concept | Purpose |
+| --- | --- |
+| workspace | Local directory where you modify files in the branch you have checked out. |
+| staging area | Virtual place where you prepare commits before committing them. |
+| refs (references) | Point branches and tags to a commit. |
+| HEAD | A special reference to the latest commit for the branch in workspace. |
+
+## Workspace - where you modify code
 
 While a clone gets a full copy of the repository, by default Git will checkout
 a copy of the _master_ branch into the directory specified at the end of that
-command. This is called your _workspace_ and is where you access and modify the
-contents of the branch.
+command.
+
+This is called your _workspace_ and is where you access and modify the contents
+of the branch.
 
 If you initialised a new repository in your current local directory, you're
 already in your workspace. Else, you need to _cd_ into that directory.
@@ -215,6 +252,82 @@ This will print the branch and commit information, show you any files which are
 not tracked, and any files which have been changed but not committed.
 
 We will see how to manage branches shortly.
+
+## Staging area - where you prepare commits
+
+Before you can _commit_ any modified files in your workspace, they must be
+added to the _staging area_ in the Git repository.
+
+This is a special Git feature that lets you craft what a commit will look like
+from the files you've modified. When you do a commit, only changes which have
+been staged will be committed.
+
+This lets you perform multiple and/or different changes, but group them in
+separate commits.
+
+To put a file into the staging area, you _add_ it.
+
+```bash
+# Add README.me to the staging area
+git add README.md
+```
+
+You can even add just _parts_ of a changed file, in selectable chunks. This can
+be useful when you've made lots of changes in the workspace but don't want them
+all to go into the current commit.
+
+```bash
+# Add just _parts_ of a changed file
+git add --patch README.md
+```
+
+You can see which files you've staged with the _status_ command, and see the
+changes with _diff --cached_ command.
+
+## refs (references) - pointers to a commit
+
+In Subversion, a branch or tag is a full copy of the repository (usually done
+with hardlinks).
+
+In Git, a branch or tag just references a commit in the project history (this
+is why branching is so cheap!).
+
+These refs files are usually the name of a branch or tag and are stored under
+the _.git/refs/_ directory in the repository.
+
+So when you refer to a branch like _master_ this is actually just a pointer to
+a commit. Git knows which commit by reading the refs file called _master_.
+
+```bash
+# See the content of the refs file for local master branch
+cat .git/refs/heads/master
+
+# Use Git to parse the ref for local master branch
+git rev-parse refs/heads/master
+```
+
+## HEAD - points to the branch in workspace
+
+There's a special reference in Git called _HEAD_. It points to the latest
+commit on the branch you have checked out in your workspace.
+
+You can use this to refer to the latest commit in your workspace when
+performing Git commands, or commits relative to HEAD.
+
+| Reference | Location |
+| --- | --- |
+| HEAD | The latest commit |
+| HEAD^ | One commit back from HEAD |
+| HEAD^^ | Two commits back from HEAD |
+| HEAD~9 | Nine commits back from HEAD |
+
+```bash
+# See what branch HEAD is pointing to (probably master)
+git symbolic-ref HEAD
+
+# We can parse the ref and see what commit HEAD is pointing to
+git rev-parse HEAD
+```
 
 # Remotes
 
@@ -563,6 +676,44 @@ a commit, rather than the entire change.
 
 We'll re-visit this some more below.
 
+## Making a change
+
+You can make changes to tracked files in your workspace.
+
+### Viewing differences in the code
+
+You can view the differences between any two points in the Git history or
+workspace.
+
+By default, the _diff_ command will compare your workspace with the latest
+commit in the branch you're on.
+
+```bash
+git diff
+```
+
+If you have added some files to the staging area, you won't see these unless
+you add the --cached option.
+
+```bash
+git diff --cached
+```
+
+It gets more interesting than that, you can compare your workspace with the
+latest changes in a branch (including remotes) or with a commit at any point
+in time.
+
+```bash
+# Compare workspace with remote branch
+git diff remote/branch
+
+# Compare workspace with another commit
+git diff <commit>
+
+# Compare two branches
+git diff branch other/branch
+```
+
 ## Committing a change
 
 When you commit a change using Subversion, it is a centralised event.
@@ -600,7 +751,12 @@ git commit
 Type in your commit message. If you need to change the default text editor, you
 can set this in your ~/.gitconfig.
 
-### Adding a commit message
+### Writing a good commit message
+
+Quality, informative commit messages are really valuable.
+
+<img src="/images/git_commit_2x.png" width="400" alt="Merge branch 
+'asdfasjkfdlas/alkdjf' into sdkjfls-final https://xkcd.com/1296/"/>
 
 In general, good commit messages should follow a pattern like so.
 
@@ -610,7 +766,8 @@ In general, good commit messages should follow a pattern like so.
   using lines of no more than 72 characters.
 - In a new paragraph, describe how the patch solves or implements the above.
 - Add any other notes relating to the patch (like how to test it).
-- If related tickets, merge requests or snippets exist in GitLab, they can be referenced.
+- If related tickets, merge requests or snippets exist in GitLab, they can be
+  referenced.
 
 Here is an example commit message.
 
@@ -622,7 +779,7 @@ left off the AUTHORS section in the README.md.
 
 This patch adds these authors so that their work is attributed.
 
-Related to #123, fixes #456 and Closes group/otherproject#22.
+Related to #123, fixes #456 and closes group/otherproject#22.
 
 See merge request !123 and related snippet $123.
 ```
@@ -655,6 +812,106 @@ histories have diverged and suggest you do a pull to get the latest changes.
 
 If you're amending, you don't want to do that, you just want to force push.
 
+# Modifying and squashing commits
+
+<img src="/images/danger.jpg" align="left" width="200" alt="Danger, Will
+Robinson, Danger!"/>
+
+Git lets you modify your existing commits in a number of ways, via an
+interactive _rebase_ command. This is one of the most amazing, useful, yet
+often misunderstood features in Git.
+
+* p, pick = use commit
+* r, reword = use commit, but edit the commit message
+* e, edit = use commit, but stop for amending
+* s, squash = use commit, but meld into previous commit
+* f, fixup = like "squash", but discard this commit's log message
+* x, exec = run command (the rest of the line) using shell
+* d, drop = remove commit
+
+It can easily get you into trouble as it will change and re-write your branch
+history, so consider [creating a backup
+branch](/tips.md#make-a-local-backup-branch) before you use rebase.
+
+**WARNING:** In general, you should not change the history for branches that
+have already been made public, in particular the master branch. This will break
+everyone else's copy of the branch and create problems for any other feature
+branches that are in progress.
+
+However, rebase is a really great tool for your own feature branches. It
+provides a way to group and tidy up commit history before your branch is merged
+into master.
+
+## Interactive rebase
+
+Before you can change history, you need to perform an interactive rebase and
+provide Git with a commit range.
+
+For example, you go from HEAD (the latest commit on the branch in your
+workspace) back two commits, you could do this.
+
+```bash
+git rebase --interactive HEAD~2
+```
+
+This will put you into a menu where you can see the three commits listed with
+options for the rebase command you want to perform (see above).
+
+### Delete commits
+
+To delete a commit you can simply delete the line, then save and exit the
+rebase file.
+
+Alternatively, change _pick_ to _drop_, then save and exit the rebase file.
+
+### Reorder commits
+
+A simple rebase task is to simple re-order the commits. All you need to do is
+move the lines into the new order you want.
+
+Keep in mind that you may encounter conflicts which you need to fix. There may
+be code missing which means that Git can't apply the patch.
+
+### Squashing commits
+
+You can squash multiple commits together and keep their commit messages by
+finding the first commit you want to keep and leaving it at _pick_.
+
+Now go to the next commit(s) you want to squash together and change _pick_ to
+_squash_.
+
+Save and close the rebase file and Git will prompt you for a new commit
+message. By default this will be the combination of the commits. Once you're
+happy with your new combined commit message, save and quit the file and Git
+will squash the commits together into one.
+
+If you are happy to discard any of the other commit message you can use _fixup_
+instead of _squash_ and they will be automatically discarded.
+
+### Modifying a commit message
+
+Change _pick_ to _reword_ for the commit message(s) you want to re-write then save
+and close the rebase file.
+
+You can then edit each commit message one by one.
+
+### Modifying a commit
+
+Change _pick_ to _edit_ for the commit(s) you want to edit then save and
+close the rebase file.
+
+Git will take your workspace back to each commit in turn.
+
+Modify files as you see fit, add them, then continue the rebase.
+
+```bash
+vim README.md
+
+git add README.md
+
+git rebase --continue
+```
+
 # Getting recent updates
 
 When you're working on a branch that is going to go into master, often master
@@ -682,41 +939,6 @@ git pull --rebase origin master
 This also works if you're working on a feature branch collaboratively. If
 someone has made a change to your branch, just rebase their changes onto yours,
 and push.
-
-# Viewing differences in the code
-
-You can view the differences between any two points in the Git history or
-workspace.
-
-By default, the _diff_ command will compare your workspace with the latest
-commit in the branch you're on.
-
-```bash
-git diff
-```
-
-If you have added some files to the staging area, you won't see these unless
-you add the --cached option.
-
-```bash
-git diff --cached
-```
-
-It gets more interesting than that, you can compare your workspace with the
-latest changes in a branch (including remotes) or with a commit at any point
-in time.
-
-```bash
-# Compare workspace with remote branch
-git diff remote/branch
-
-# Compare workspace with another commit
-git diff <commit>
-
-# Compare two branches
-git diff branch other/branch
-```
-
 
 # Sharing your changes
 

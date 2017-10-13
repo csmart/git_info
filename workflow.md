@@ -1,26 +1,25 @@
+# Git workflow
+
+Here is what a common branch based development workflow using Git might look
+like. It does not go into all details or options, it's designed to give you a
+quick guide on how you might use Git.
+
 
 <!-- vim-markdown-toc GFM -->
 
-* [Common Git workflow](#common-git-workflow)
-	* [Getting and working in a repository](#getting-and-working-in-a-repository)
-	* [Getting the latest changes from master into feature branch](#getting-the-latest-changes-from-master-into-feature-branch)
-	* [Merging your code back into master](#merging-your-code-back-into-master)
-		* [Pushing code to GitLab](#pushing-code-to-gitlab)
-		* [Pushing code for Gerrit code review](#pushing-code-for-gerrit-code-review)
-			* [Using Git review with Gerrit](#using-git-review-with-gerrit)
-	* [Starting on the next branch](#starting-on-the-next-branch)
-		* [Reset your master branch](#reset-your-master-branch)
+* [Getting and working in a repository](#getting-and-working-in-a-repository)
+* [Getting the latest changes from master into feature branch](#getting-the-latest-changes-from-master-into-feature-branch)
+* [Merging your code back into master](#merging-your-code-back-into-master)
+	* [Pushing code to GitLab](#pushing-code-to-gitlab)
+	* [Pushing code for Gerrit code review](#pushing-code-for-gerrit-code-review)
+		* [Using Git review with Gerrit](#using-git-review-with-gerrit)
+* [Starting on the next branch](#starting-on-the-next-branch)
+	* [Reset your master branch](#reset-your-master-branch)
 * [Common issues](#common-issues)
 
 <!-- vim-markdown-toc -->
 
-# Common Git workflow
-
-Here is what a standard branch based development workflow using Git might look
-like. It does not go into all details or options, it's designed to give you a
-quick guide on how you might use Git.
-
-## Getting and working in a repository
+# Getting and working in a repository
 
 ```bash
 # Clone a repository from a remote location over SSH
@@ -67,7 +66,7 @@ git commit --amend
 Note that amending a commit will re-write your history as the change is
 different now and the commit hash will be different.
 
-## Getting the latest changes from master into feature branch
+# Getting the latest changes from master into feature branch
 
 We can pull in the latest changes from the master branch into your local
 feature branch.
@@ -96,12 +95,12 @@ Note that this will _re-write your recent history_.
 All of the hashes from your commits will be different now because we've
 inserted any new commits from master in before your local commits.
 
-## Merging your code back into master
+# Merging your code back into master
 
 Now that you have made your change, you need to follow a process to get the
 code in your feature branch merged into master.
 
-### Pushing code to GitLab
+## Pushing code to GitLab
 
 With GitLab you push your local branch up to the remote server and then create
 a merge request in the web interface.
@@ -133,7 +132,7 @@ your feature branch merged into master.
 You can make new local changes and push again, GitLab will automatically update
 the merge request.
 
-### Pushing code for Gerrit code review
+## Pushing code for Gerrit code review
 
 With Gerrit you don't push your local branch to a remote branch of the same
 name, you push it to a special location called _refs/for/master_. This tells
@@ -151,7 +150,7 @@ git remote add gerrit user@gerrit:/path/to/code
 git push gerrit mybranch:refs/for/master
 ```
 
-#### Using Git review with Gerrit
+### Using Git review with Gerrit
 
 The OpenStack project provides a tool called
 [git-review](https://docs.openstack.org/infra/git-review/index.html) to make
@@ -178,7 +177,7 @@ git review
 You can make new local commits as required and then re-run the same command
 which will update the code review in Gerrit.
 
-## Starting on the next branch
+# Starting on the next branch
 You don't need to wait for your code to merge before working on a new branch,
 we can always pull in the latest changes.
 
@@ -197,7 +196,7 @@ git checkout master
 git pull origin master --ff-only
 ```
 
-### Reset your master branch
+## Reset your master branch
 
 If you happen to have some local commits in master that are not upstream (they
 should be in a branch instead) you can get the latest changes and reset your
