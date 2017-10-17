@@ -866,7 +866,7 @@ Alternatively, change _pick_ to _drop_, then save and exit the rebase file.
 
 ### Reorder commits
 
-A simple rebase task is to simple re-order the commits. All you need to do is
+A simple rebase task is to simply re-order the commits. All you need to do is
 move the lines into the new order you want.
 
 Keep in mind that you may encounter conflicts which you need to fix. There may
@@ -885,7 +885,7 @@ message. By default this will be the combination of the commits. Once you're
 happy with your new combined commit message, save and quit the file and Git
 will squash the commits together into one.
 
-If you are happy to discard any of the other commit message you can use _fixup_
+If you are happy to discard any of the other commit messages you can use _fixup_
 instead of _squash_ and they will be automatically discarded.
 
 ### Modifying a commit message
@@ -969,7 +969,7 @@ git push
 
 ## When pushing fails
 
-If other users have committed changes to the branch you are pushing to the
+If other users have committed changes to the branch you are pushing to, the
 remote copy of the branch will have extra commits that your local copy does not
 have.
 
